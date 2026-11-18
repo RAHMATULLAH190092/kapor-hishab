@@ -1,0 +1,10 @@
+{
+  "name": "কাপড়ের হিসাব",
+  "short_name": "কাপড় হিসাব",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f2f7f4",
+  "theme_color": "#176b55",
+  "description": "অফলাইনে কাপড়ের মাপ, কাটিং ও দামের হিসাব"
+}
