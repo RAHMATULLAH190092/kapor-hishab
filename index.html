@@ -1,51 +1,109 @@
-<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#176b55"><link rel="manifest" href="manifest.json"><title>কাপড়ের হিসাব</title>
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#155e75"><link rel="manifest" href="manifest.json">
+<title>কাপড় হিসাব</title>
 <style>
-*{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#f2f7f4;color:#17231f;max-width:700px;margin:auto;padding:14px}header{background:#176b55;color:white;padding:18px;border-radius:16px}nav{display:flex;gap:6px;overflow:auto;margin:12px 0}button{border:0;border-radius:10px;padding:11px;background:#176b55;color:white;font-weight:bold}nav button{background:#e0ebe5;color:#174c3c;white-space:nowrap}.active{background:#176b55;color:white}.card{background:white;padding:16px;border-radius:15px;margin:12px 0}h2{font-size:19px;margin:0 0 10px}label{display:block;margin:10px 0 5px;font-weight:bold}input,select{width:100%;padding:11px;border:1px solid #cbd8d1;border-radius:9px;font:inherit}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.result{background:#e8f4ee;padding:13px;border-radius:10px;margin:12px 0}.big{font-size:25px;font-weight:bold;color:#176b55}.muted{font-size:13px;color:#607169;line-height:1.5}.tab{display:none}.tab.show{display:block}.history{border:1px solid #e1e9e4;padding:10px;border-radius:10px;margin:8px 0}.danger{background:#fbe9e7;color:#9d3027}
-</style></head><body>
-<header><h1>কাপড়ের হিসাব</h1><div>গজ • মিটার • হাত • কাটিং • দাম • হিস্টোরি</div></header>
-<nav><button class="active" data-tab="measure">মাপ</button><button data-tab="price">দাম</button><button data-tab="cut">কাটিং</button><button data-tab="history">হিস্টোরি</button></nav>
-
-<section id="measure" class="tab show"><div class="card"><h2>মাপ রূপান্তর</h2>
-<label>পরিমাণ</label><input id="qty" type="number" value="1" min="0" step="any">
-<div class="grid"><div><label>যে এককে আছে</label><select id="from"><option>গজ</option><option>মিটার</option><option>হাত</option><option>ফুট</option><option>ইঞ্চি</option></select></div><div><label>যে এককে চান</label><select id="to"><option>গজ</option><option>মিটার</option><option>হাত</option><option>ফুট</option><option>ইঞ্চি</option></select></div></div>
-<div class="result"><div class="muted">ফলাফল</div><div class="big" id="converted">১ গজ</div></div><button onclick="save('মাপ রূপান্তর',qty.value+' '+from.value+' = '+converted.textContent)">হিসাব সেভ</button>
-<p class="muted">১ গজ = ৩ ফুট = ৩৬ ইঞ্চি = ০.৯১৪৪ মিটার। ১ হাত = ১.৫ ফুট আনুমানিক।</p></div>
-<div class="card"><h2>কথায় বলা গজ</h2><div class="grid"><div><label>পরিমাণ</label><select id="fraction"><option value=".5">আধা গজ</option><option value=".75">পৌনে এক গজ</option><option value="1">এক গজ</option><option value="1.25">সোয়া এক গজ</option><option value="1.5">দেড় গজ</option><option value="1.75">পৌনে দুই গজ</option><option value="2">দুই গজ</option><option value="2.25">সোয়া দুই গজ</option><option value="2.5">আড়াই গজ</option><option value="2.75">পৌনে তিন গজ</option><option value="3">তিন গজ</option><option value="3.5">সাড়ে তিন গজ</option></select></div><div><label>একক</label><select id="fracUnit"><option>গজ</option><option>মিটার</option><option>ফুট</option><option>হাত</option></select></div></div><div class="result big" id="fracResult">০.৫০ গজ</div><button onclick="save('কথায় বলা গজ',fraction.selectedOptions[0].text+' = '+fracResult.textContent)">হিসাব সেভ</button></div></section>
-
-<section id="price" class="tab"><div class="card"><h2>কাপড়ের দাম</h2><div class="grid"><div><label>পরিমাণ</label><input id="pqty" type="number" value="10" min="0"></div><div><label>একক</label><select id="punit"><option>গজ</option><option>মিটার</option><option>হাত</option><option>ফুট</option></select></div></div><label>প্রতি এককের দাম (টাকা)</label><input id="rate" type="number" value="150" min="0"><div class="result"><div class="muted">মোট দাম</div><div class="big" id="total">৳ ১,৫০০</div></div><button onclick="save('দামের হিসাব',pqty.value+' '+punit.value+', প্রতি একক ৳'+rate.value+', মোট '+total.textContent)">হিসাব সেভ</button></div></section>
-
-<section id="cut" class="tab"><div class="card"><h2>মশারি / পর্দা / চাদরের কাটিং হিসাব</h2><p class="muted">এটি সমতল আয়তাকার প্যানেলের আনুমানিক হিসাব। পাশ, ছাদ, ঝুল, সেলাই বা আলাদা অংশ থাকলে আলাদাভাবে যোগ করুন।</p>
-<div class="grid"><div><label>কী বানাবেন</label><select id="kind"><option>মশারি</option><option>পর্দা</option><option>বিছানার চাদর</option><option>টেবিল ক্লথ</option><option>অন্যান্য</option></select></div><div><label>কয়টি</label><input id="pieces" type="number" value="1" min="1"></div></div>
-<h3>জিনিসের মাপ</h3><div class="grid"><div><label>দৈর্ঘ্য</label><input id="len" type="number" value="40" min="0"></div><div><label>প্রস্থ</label><input id="wid" type="number" value="35" min="0"></div></div><label>মাপের একক</label><select id="objUnit"><option>ফুট</option><option>ইঞ্চি</option><option>মিটার</option></select>
-<h3>কাপড়ের রোল</h3><div class="grid"><div><label>কাপড়ের প্রস্থ</label><input id="roll" type="number" value="4" min="0"></div><div><label>প্রস্থের একক</label><select id="rollUnit"><option>ফুট</option><option>ইঞ্চি</option><option>মিটার</option></select></div></div>
-<div class="grid"><div><label>বাড়তি কাপড় (%)</label><input id="extra" type="number" value="10" min="0"></div><div><label>প্রতি গজ দাম (ঐচ্ছিক)</label><input id="cutRate" type="number" min="0" placeholder="টাকা"></div></div>
-<button onclick="calcCut()">কাপড়ের হিসাব করুন</button><div id="cutResult" class="result" style="display:none"></div><button id="saveCut" style="display:none;background:#e5eee9;color:#174c3c" onclick="saveCutHistory()">হিসাব সেভ</button></div></section>
-
-<section id="history" class="tab"><div class="card"><h2>হিসাবের ইতিহাস</h2><p class="muted">ইতিহাস এই ফোনেই থাকবে। ব্রাউজারের ডেটা মুছে ফেললে ইতিহাসও মুছে যেতে পারে।</p><button class="danger" onclick="clearHistory()">সব ইতিহাস মুছুন</button><div id="hist"></div></div></section>
-
+:root{--p:#155e75;--bg:#f1f5f9;--card:#fff;--ink:#102a43;--muted:#627d98;--line:#d9e2ec;--ok:#087f5b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,"Noto Sans Bengali",sans-serif}
+header{background:linear-gradient(120deg,#164e63,#0e7490);color:white;padding:18px 16px 14px;position:sticky;top:0;z-index:3}
+header h1{margin:0;font-size:22px}header p{margin:4px 0 0;font-size:13px;opacity:.9}
+nav{display:flex;gap:7px;overflow:auto;padding:10px;background:#e2e8f0;position:sticky;top:75px;z-index:2}
+nav button{border:0;border-radius:20px;padding:9px 13px;white-space:nowrap;background:#fff;color:#334e68;font-weight:600}
+nav button.active{background:var(--p);color:#fff}
+main{max-width:850px;margin:auto;padding:14px}.panel{display:none}.panel.active{display:block}
+.card{background:var(--card);border-radius:14px;padding:15px;margin:0 0 13px;box-shadow:0 2px 8px #102a4310}
+h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:14px 0 8px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:11px;font:inherit;background:#fff;color:var(--ink);min-width:0}
+textarea{min-height:70px;resize:vertical}
+button.primary,button.secondary,button.danger{border:0;border-radius:9px;padding:11px 14px;font:inherit;font-weight:650;cursor:pointer}
+.primary{background:var(--p);color:white}.secondary{background:#e0f2fe;color:#075985}.danger{background:#fee2e2;color:#991b1b}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.result{background:#ecfeff;border:1px solid #a5f3fc;border-radius:10px;padding:12px;margin-top:12px;line-height:1.7}
+.small{font-size:12px;color:var(--muted);line-height:1.6}.item{border:1px solid var(--line);border-radius:10px;padding:11px;margin:8px 0}
+.item strong{display:block}.item .meta{font-size:12px;color:var(--muted);margin-top:4px}
+.stat{font-size:23px;font-weight:750;color:var(--p)}.hidden{display:none!important}
+hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+@media(max-width:520px){.grid{grid-template-columns:1fr 1fr}main{padding:10px}.card{padding:12px}header{padding:14px}nav{top:69px}}
+</style></head>
+<body>
+<header><h1>🧵 কাপড় হিসাব</h1><p>মাপ • কাটিং • দাম • অর্ডার • দোকানের হিসাব</p></header>
+<nav id="nav">
+<button class="active" data-tab="measure">মাপ</button><button data-tab="mosquito">মশারি</button><button data-tab="items">পর্দা/চাদর</button><button data-tab="price">দাম ও লাভ</button><button data-tab="customers">কাস্টমার</button><button data-tab="history">হিস্টোরি</button><button data-tab="backup">ব্যাকআপ</button>
+</nav>
+<main>
+<section id="measure" class="panel active">
+<div class="card"><h2>দৈর্ঘ্য ও একক রূপান্তর</h2>
+<div class="grid"><div><label>পরিমাণ</label><input id="mval" type="number" step="any" value="1"></div><div><label>যে এককে আছে</label><select id="munit"><option value="hand">হাত</option><option value="ft">ফুট</option><option value="in">ইঞ্চি</option><option value="yd">গজ</option><option value="m">মিটার</option></select></div></div>
+<div class="actions"><button class="primary" onclick="convertUnit()">হিসাব করো</button></div><div id="mresult" class="result hidden"></div>
+<p class="small">১ হাত = ১৮ ইঞ্চি = ১.৫ ফুট। ১ গজ = ৩ ফুট।</p></div>
+<div class="card"><h2>আয়তাকার জায়গা / কাপড়ের ক্ষেত্রফল</h2>
+<div class="grid"><div><label>দৈর্ঘ্য</label><input id="al" type="number" step="any" value="20"></div><div><label>একক</label><select id="alu"><option value="hand">হাত</option><option value="ft">ফুট</option><option value="in">ইঞ্চি</option><option value="yd">গজ</option><option value="m">মিটার</option></select></div><div><label>প্রস্থ</label><input id="aw" type="number" step="any" value="30"></div><div><label>একক</label><select id="awu"><option value="hand">হাত</option><option value="ft">ফুট</option><option value="in">ইঞ্চি</option><option value="yd">গজ</option><option value="m">মিটার</option></select></div></div>
+<div class="actions"><button class="primary" onclick="areaCalc()">ক্ষেত্রফল বের করো</button></div><div id="aresult" class="result hidden"></div></div>
+</section>
+<section id="mosquito" class="panel">
+<div class="card"><h2>মশারির চার পাশ ও ছাদের কাপড়</h2>
+<div class="grid"><div><label>দৈর্ঘ্য</label><input id="ml" type="number" step="any" value="7"></div><div><label>একক</label><select id="mlu"><option value="ft">ফুট</option><option value="hand">হাত</option><option value="in">ইঞ্চি</option><option value="m">মিটার</option></select></div><div><label>প্রস্থ</label><input id="mw" type="number" step="any" value="5"></div><div><label>একক</label><select id="mwu"><option value="ft">ফুট</option><option value="hand">হাত</option><option value="in">ইঞ্চি</option><option value="m">মিটার</option></select></div><div><label>উচ্চতা</label><input id="mh" type="number" step="any" value="6"></div><div><label>একক</label><select id="mhu"><option value="ft">ফুট</option><option value="hand">হাত</option><option value="in">ইঞ্চি</option><option value="m">মিটার</option></select></div><div><label>কাপড়ের রোলের প্রস্থ</label><input id="mr" type="number" step="any" value="60"></div><div><label>রোলের একক</label><select id="mru"><option value="in">ইঞ্চি</option><option value="ft">ফুট</option><option value="hand">হাত</option><option value="m">মিটার</option></select></div><div><label>কয়টি মশারি</label><input id="mc" type="number" min="1" value="1"></div><div><label>অতিরিক্ত কাপড় (%)</label><input id="mx" type="number" min="0" value="10"></div></div>
+<div class="actions"><button class="primary" onclick="mosquitoCalc()">মশারির কাপড় হিসাব</button></div><div id="mnetresult" class="result hidden"></div>
+<p class="small">হিসাব: ছাদ (দৈর্ঘ্য × প্রস্থ) + চার পাশের ক্ষেত্রফল। মোট ক্ষেত্রফলকে রোলের প্রস্থ দিয়ে ভাগ করে আনুমানিক চলতি মিটার ও গজ বের করা হয়। প্রকৃত কাটিং, সেলাই, দরজা ও জোড়ার জন্য পরিমাণ বদলাতে পারে।</p></div>
+</section>
+<section id="items" class="panel">
+<div class="card"><h2>পর্দা / চাদর / সাধারণ প্যানেল</h2>
+<div class="grid"><div><label>নাম</label><select id="itype"><option>পর্দা</option><option>চাদর</option><option>টেবিল কভার</option><option>অন্যান্য</option></select></div><div><label>কয়টি</label><input id="icount" type="number" value="1" min="1"></div><div><label>দৈর্ঘ্য</label><input id="il" type="number" step="any"></div><div><label>একক</label><select id="ilu"><option value="ft">ফুট</option><option value="hand">হাত</option><option value="in">ইঞ্চি</option><option value="m">মিটার</option></select></div><div><label>প্রস্থ</label><input id="iw" type="number" step="any"></div><div><label>একক</label><select id="iwu"><option value="ft">ফুট</option><option value="hand">হাত</option><option value="in">ইঞ্চি</option><option value="m">মিটার</option></select></div><div><label>রোলের প্রস্থ</label><input id="ir" type="number" value="60"></div><div><label>রোলের একক</label><select id="iru"><option value="in">ইঞ্চি</option><option value="ft">ফুট</option><option value="hand">হাত</option><option value="m">মিটার</option></select></div><div><label>অতিরিক্ত (%)</label><input id="ix" type="number" value="10"></div></div>
+<div class="actions"><button class="primary" onclick="itemCalc()">কাপড় হিসাব</button></div><div id="itemresult" class="result hidden"></div></div>
+</section>
+<section id="price" class="panel">
+<div class="card"><h2>কাপড়ের দাম, খরচ ও লাভ</h2>
+<div class="grid"><div><label>কাপড়ের পরিমাণ (গজ)</label><input id="pq" type="number" step="any"></div><div><label>প্রতি গজ ক্রয়মূল্য</label><input id="pc" type="number" step="any"></div><div><label>প্রতি গজ বিক্রয়মূল্য</label><input id="ps" type="number" step="any"></div><div><label>অন্যান্য খরচ</label><input id="po" type="number" step="any" value="0"></div></div>
+<div class="actions"><button class="primary" onclick="priceCalc()">হিসাব করো</button></div><div id="priceresult" class="result hidden"></div></div>
+</section>
+<section id="customers" class="panel">
+<div class="card"><h2>কাস্টমার ও অর্ডার যোগ করো</h2>
+<div class="grid"><div><label>কাস্টমারের নাম</label><input id="cname"></div><div><label>ফোন নম্বর</label><input id="cphone" inputmode="tel"></div><div><label>কাজ / পণ্যের নাম</label><input id="cwork" placeholder="যেমন মশারি"></div><div><label>মোট টাকা</label><input id="ctotal" type="number" step="any"></div><div><label>জমা টাকা</label><input id="cpaid" type="number" step="any" value="0"></div><div><label>ডেলিভারির তারিখ</label><input id="cdate" type="date"></div></div>
+<label style="margin-top:10px">মাপ / নোট</label><textarea id="cnote" placeholder="দৈর্ঘ্য, প্রস্থ, রং বা অন্য তথ্য"></textarea>
+<div class="actions"><button class="primary" onclick="addCustomer()">অর্ডার সংরক্ষণ</button></div><div id="customerresult" class="small"></div></div>
+<div class="card"><h2>কাস্টমার ও বাকি টাকার তালিকা</h2><div id="customerlist"></div></div>
+</section>
+<section id="history" class="panel"><div class="card"><h2>হিসাবের ইতিহাস</h2><div id="historylist"></div><div class="actions"><button class="danger" onclick="clearHistory()">সব হিস্টোরি মুছুন</button></div></div></section>
+<section id="backup" class="panel">
+<div class="card"><h2>ব্যাকআপ ও ডেটা</h2><p>কাস্টমার, অর্ডার ও হিস্টোরি ফোনে সংরক্ষিত থাকবে। ফোন বদলানোর আগে ব্যাকআপ ডাউনলোড করে রাখুন।</p>
+<div class="actions"><button class="primary" onclick="backupData()">ব্যাকআপ ডাউনলোড</button><button class="secondary" onclick="document.getElementById('restorefile').click()">ব্যাকআপ ফিরিয়ে আনুন</button><input id="restorefile" type="file" accept="application/json" class="hidden" onchange="restoreData(event)"></div>
+<hr><h3>প্রিন্ট / PDF</h3><p class="small">যে হিসাব বা তালিকা প্রিন্ট করতে চান, সেটি স্ক্রিনে খুলে প্রিন্ট বাটন চাপুন। ফোনের প্রিন্ট অপশন থেকে PDF হিসেবে সেভ করা যাবে।</p><button class="secondary" onclick="window.print()">প্রিন্ট / PDF</button>
+<hr><h3>ডেটা মুছে ফেলা</h3><button class="danger" onclick="wipeAll()">সব ডেটা মুছুন</button></div>
+<div class="card"><h2>একক সম্পর্কে</h2><p class="small">১ হাত = ১৮ ইঞ্চি = ১.৫ ফুট<br>১ গজ = ৩ ফুট<br>১ মিটার ≈ ১.০৯৩৬ গজ<br>সব হিসাব আনুমানিক; কাপড়ের প্রকৃত কাটিংয়ের আগে মাপ যাচাই করুন।</p></div>
+</section>
+</main>
 <script>
-const $=id=>document.getElementById(id), f={'মিটার':1,'গজ':.9144,'ফুট':.3048,'ইঞ্চি':.0254,'হাত':.4572};
-const bn=n=>new Intl.NumberFormat('bn-BD',{maximumFractionDigits:3}).format(n);
-const money=n=>'৳ '+new Intl.NumberFormat('bn-BD',{maximumFractionDigits:2}).format(n);
-function m(v,u){return v*f[u]} function val(v,u){return v/f[u]}
-function conv(){converted.textContent=bn(val(m(+qty.value||0,from.value),to.value))+' '+to.value}
-function frac(){fracResult.textContent=bn(val(m(+fraction.value,'গজ'),fracUnit.value))+' '+fracUnit.value}
-function price(){total.textContent=money(val(m(+pqty.value||0,punit.value),'গজ')*(+rate.value||0))}
-['qty','from','to'].forEach(x=>$(x).addEventListener('input',conv));['fraction','fracUnit'].forEach(x=>$(x).addEventListener('input',frac));['pqty','punit','rate'].forEach(x=>$(x).addEventListener('input',price));
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('show',t.id===b.dataset.tab));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));if(b.dataset.tab==='history')render()});
-function getH(){try{return JSON.parse(localStorage.getItem('khistory')||'[]')}catch(e){return []}}
-function save(type,detail){let h=getH();h.unshift({type,detail,date:new Date().toLocaleString('bn-BD')});localStorage.setItem('khistory',JSON.stringify(h));alert('হিসাব সেভ হয়েছে')}
-let lastCut='';
-function calcCut(){let L=+len.value,W=+wid.value,R=+roll.value,N=Math.max(1,+pieces.value||1);if(!(L>0&&W>0&&R>0)){alert('সব মাপ শূন্যের বেশি দিন');return}
-let lm=m(L,objUnit.value),wm=m(W,objUnit.value),rm=m(R,rollUnit.value);
-let option1=Math.ceil(wm/rm)*lm,option2=Math.ceil(lm/rm)*wm,raw=Math.min(option1,option2)*N;
-let yards=val(raw*(1+Math.max(0,+extra.value||0)/100),'গজ'),cost=yards*(+cutRate.value||0);
-lastCut=kind.value+': '+L+'×'+W+' '+objUnit.value+', কাপড়ের প্রস্থ '+R+' '+rollUnit.value+'; '+bn(yards)+' গজ'+(+cutRate.value>0?'; দাম '+money(cost):'');
-cutResult.style.display='block';cutResult.innerHTML='<div class="muted">আনুমানিক প্রয়োজনীয় কাপড়</div><div class="big">'+bn(yards)+' গজ</div><p>বাড়তি '+bn(+extra.value||0)+'% সহ।</p><p>বাড়তি ছাড়া: '+bn(val(raw,'গজ'))+' গজ</p>'+(+cutRate.value>0?'<b>আনুমানিক দাম: '+money(cost)+'</b>':'')+'<p class="muted">এটি আয়তাকার প্যানেলের হিসাব; মশারির পাশ/ছাদ বা সেলাইয়ের জন্য বাড়তি অংশ আলাদা ধরুন।</p>';saveCut.style.display='inline-block'}
-function saveCutHistory(){if(lastCut)save('কাটিং হিসাব',lastCut)}
-function render(){let h=getH();hist.innerHTML=h.length?h.map((x,i)=>'<div class="history"><b>'+x.type+'</b><div>'+x.detail+'</div><small>'+x.date+'</small><br><button class="danger" onclick="del('+i+')">মুছুন</button></div>').join(''):'<p class="muted">এখনো কোনো হিসাব সেভ করা হয়নি।</p>'}
-function del(i){let h=getH();h.splice(i,1);localStorage.setItem('khistory',JSON.stringify(h));render()}
-function clearHistory(){if(confirm('সব ইতিহাস মুছে ফেলবেন?')){localStorage.removeItem('khistory');render()}}
-conv();frac();price();
-if('serviceWorker'in navigator&&location.protocol.startsWith('http'))addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+const KEY='kapor_hishab_full_v3';
+let db=JSON.parse(localStorage.getItem(KEY)||'{"history":[],"customers":[]}');
+function save(){localStorage.setItem(KEY,JSON.stringify(db))}
+const factors={m:1,ft:.3048,in:.0254,hand:.4572,yd:.9144};
+const names={m:'মিটার',ft:'ফুট',in:'ইঞ্চি',hand:'হাত',yd:'গজ'};
+function val(id){return Number(document.getElementById(id).value)||0}
+function toM(n,u){return n*(factors[u]||1)}
+function fmt(n){return (Number(n)||0).toLocaleString('bn-BD',{maximumFractionDigits:2})}
+function show(id,html){let e=document.getElementById(id);e.innerHTML=html;e.classList.remove('hidden')}
+function log(title,detail){db.history.unshift({date:new Date().toLocaleString('bn-BD'),title,detail});db.history=db.history.slice(0,150);save();renderHistory()}
+function convertUnit(){let n=val('mval'),u=document.getElementById('munit').value,m=toM(n,u);show('mresult',`${fmt(n)} ${names[u]} =<br>${fmt(m/factors.hand)} হাত<br>${fmt(m/factors.ft)} ফুট<br>${fmt(m/factors.in)} ইঞ্চি<br>${fmt(m/factors.yd)} গজ<br>${fmt(m)} মিটার`);log('একক রূপান্তর',`${fmt(n)} ${names[u]}`)}
+function areaCalc(){let l=toM(val('al'),document.getElementById('alu').value),w=toM(val('aw'),document.getElementById('awu').value),a=l*w;if(l<=0||w<=0)return alert('দৈর্ঘ্য ও প্রস্থ দিন');show('aresult',`ক্ষেত্রফল: ${fmt(a)} বর্গমিটার<br>${fmt(a/0.092903)} বর্গফুট<br>${fmt(a/(.4572*.4572))} বর্গহাত`);log('ক্ষেত্রফল',`${fmt(a)} বর্গমিটার`)}
+function fabricEstimate(area,roll,count,extra){let run=area/roll*count*(1+extra/100);return {m:run,yd:run/.9144}}
+function mosquitoCalc(){let l=toM(val('ml'),document.getElementById('mlu').value),w=toM(val('mw'),document.getElementById('mwu').value),h=toM(val('mh'),document.getElementById('mhu').value),roll=toM(val('mr'),document.getElementById('mru').value),c=Math.max(1,val('mc')),x=val('mx');if(!l||!w||!h||!roll)return alert('সব মাপ ও রোলের প্রস্থ দিন');let roof=l*w,sides=2*(l+w)*h,total=roof+sides,r=fabricEstimate(total,roll,c,x);show('mnetresult',`ছাদের কাপড়: ${fmt(roof)} বর্গমিটার<br>চার পাশের কাপড়: ${fmt(sides)} বর্গমিটার<br>মোট ক্ষেত্রফল: ${fmt(total*c)} বর্গমিটার<br>অতিরিক্তসহ আনুমানিক কাপড়: <b>${fmt(r.yd)} গজ</b> (${fmt(r.m)} মিটার)`);log('মশারির হিসাব',`${fmt(r.yd)} গজ; ${c}টি মশারি`)}
+function itemCalc(){let l=toM(val('il'),document.getElementById('ilu').value),w=toM(val('iw'),document.getElementById('iwu').value),roll=toM(val('ir'),document.getElementById('iru').value),c=Math.max(1,val('icount')),x=val('ix');if(!l||!w||!roll)return alert('দৈর্ঘ্য, প্রস্থ ও রোলের প্রস্থ দিন');let a=l*w,r=fabricEstimate(a,roll,c,x),t=document.getElementById('itype').value;show('itemresult',`${t} মোট ক্ষেত্রফল: ${fmt(a*c)} বর্গমিটার<br>অতিরিক্তসহ আনুমানিক কাপড়: <b>${fmt(r.yd)} গজ</b> (${fmt(r.m)} মিটার)`);log(t+' হিসাব',`${fmt(r.yd)} গজ; ${c}টি`)}
+function priceCalc(){let q=val('pq'),c=val('pc'),s=val('ps'),o=val('po'),cost=q*c+o,sale=q*s,profit=sale-cost;show('priceresult',`মোট ক্রয় ও অন্যান্য খরচ: ${fmt(cost)} টাকা<br>মোট বিক্রয়: ${fmt(sale)} টাকা<br><b>লাভ/ক্ষতি: ${fmt(profit)} টাকা</b>`);log('দাম ও লাভ',`লাভ/ক্ষতি ${fmt(profit)} টাকা`)}
+function addCustomer(){let name=document.getElementById('cname').value.trim(),total=val('ctotal'),paid=val('cpaid');if(!name)return alert('কাস্টমারের নাম লিখুন');if(total<0||paid<0)return alert('টাকার পরিমাণ সঠিক দিন');db.customers.unshift({id:Date.now(),name,phone:document.getElementById('cphone').value,work:document.getElementById('cwork').value,total,paid,date:document.getElementById('cdate').value,note:document.getElementById('cnote').value});save();['cname','cphone','cwork','ctotal','cdate','cnote'].forEach(id=>document.getElementById(id).value='');document.getElementById('cpaid').value='0';renderCustomers();document.getElementById('customerresult').textContent='অর্ডার সংরক্ষণ হয়েছে।';}
+function renderCustomers(){let e=document.getElementById('customerlist');if(!db.customers.length){e.innerHTML='<p class="small">এখনো কোনো অর্ডার নেই।</p>';return}e.innerHTML=db.customers.map(c=>`<div class="item"><strong>${esc(c.name)} — ${esc(c.work||'অর্ডার')}</strong><div class="meta">ফোন: ${esc(c.phone||'—')} • ডেলিভারি: ${esc(c.date||'—')}<br>মোট: ${fmt(c.total)} টাকা • জমা: ${fmt(c.paid)} টাকা • <b>বাকি: ${fmt(c.total-c.paid)} টাকা</b><br>${esc(c.note||'')}</div><div class="actions"><button class="secondary" onclick="payment(${c.id})">জমা যোগ</button><button class="danger" onclick="delCustomer(${c.id})">মুছুন</button></div></div>`).join('')}
+function payment(id){let c=db.customers.find(x=>x.id===id);let n=prompt('কত টাকা জমা দিল?');if(n===null)return;n=Number(n);if(!Number.isFinite(n)||n<=0)return alert('সঠিক টাকা লিখুন');c.paid+=n;save();renderCustomers()}
+function delCustomer(id){if(confirm('এই অর্ডারটি মুছবেন?')){db.customers=db.customers.filter(c=>c.id!==id);save();renderCustomers()}}
+function renderHistory(){let e=document.getElementById('historylist');if(!e)return;e.innerHTML=db.history.length?db.history.map(x=>`<div class="item"><strong>${esc(x.title)}</strong><div class="meta">${esc(x.date)}<br>${esc(x.detail)}</div></div>`).join(''):'<p class="small">কোনো হিস্টোরি নেই।</p>'}
+function clearHistory(){if(confirm('সব হিস্টোরি মুছবেন?')){db.history=[];save();renderHistory()}}
+function backupData(){let b=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='kapor-hishab-backup.json';a.click();URL.revokeObjectURL(a.href)}
+function restoreData(ev){let f=ev.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!Array.isArray(d.history)||!Array.isArray(d.customers))throw 0;if(confirm('বর্তমান ডেটার সঙ্গে ব্যাকআপের ডেটা প্রতিস্থাপন করবেন?')){db=d;save();renderCustomers();renderHistory();alert('ব্যাকআপ ফিরিয়ে আনা হয়েছে')}}catch(e){alert('ফাইলটি সঠিক ব্যাকআপ নয়')}};r.readAsText(f)}
+function wipeAll(){if(confirm('সতর্কতা: সব কাস্টমার ও হিস্টোরি মুছে যাবে। আগে ব্যাকআপ নিয়েছেন?')){db={history:[],customers:[]};save();renderCustomers();renderHistory()}}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+document.getElementById('nav').addEventListener('click',e=>{let b=e.target.closest('button[data-tab]');if(!b)return;document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab));if(b.dataset.tab==='customers')renderCustomers();if(b.dataset.tab==='history')renderHistory()});
+renderCustomers();renderHistory();
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 </script></body></html>
